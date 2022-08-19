@@ -1,6 +1,6 @@
 import sqlite3
 # Abrir / Crear una conexion
-miConexion=sqlite3.connect("BD_Banco")
+miConexion=sqlite3.connect("BD_Banco.db")
 
 miCursor=miConexion.cursor()
 
@@ -20,7 +20,7 @@ class movimiento():
 		self.fecha=fecha
 	@staticmethod
 	def crearMov(concepto,saldoAnterior,saldoActual,cuentaid,fecha):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		miCursor.execute("INSERT INTO movimientos VALUES (NULL,?,?,?,?,?)", (concepto,saldoAnterior,saldoActual,cuentaid,fecha))
@@ -36,7 +36,7 @@ class movimiento():
 		Carga con una busqueda con el concepto
 		Carga con id con cuentaid 
 		'''
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 		select="select * from movimientos where 1=1 "
 		if concepto != None:
@@ -67,7 +67,7 @@ class cuenta():
 
 	@staticmethod
 	def crearCuenta(nombre,saldo,FechaCreacion,codcliente):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		miCursor.execute("INSERT INTO cuentas VALUES (NULL,?,?,?,?)", (nombre,saldo,FechaCreacion,codcliente))
@@ -81,7 +81,7 @@ class cuenta():
 
 
 	def borrarCuenta(self):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 		
 		miCursor.execute("delete from cuentas where cue_codcue='"+str(self.id)+"'")
@@ -90,7 +90,7 @@ class cuenta():
 		miConexion.close()
 	
 	def updateContra(self,clave):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		miCursor.execute("update cuentas set cue_contrasenya='"+ clave +"' where cue_codcue='"+str(self.id)+"'")
@@ -107,7 +107,7 @@ class cuenta():
 		Carga con una busqueda con el nombre
 		Carga con id el cliente 
 		'''
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 		select="select * from cuentas where 1=1 "
 		if nombre != None:
@@ -140,7 +140,7 @@ class cliente():
 		self.clave=clave
 	@staticmethod
 	def crearCliente(nombre,apellidos,fechaNacimiento,dni,telefono,clave):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		miCursor.execute("INSERT INTO clientes VALUES (NULL,?,?,?,?,?,?)", (nombre,apellidos,fechaNacimiento,dni,telefono,clave))
@@ -152,7 +152,7 @@ class cliente():
 		return cli
 
 	def borrarCliente(self):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 		
 		miCursor.execute("delete from clientes where cli_codcli='"+str(self.id)+"'")
@@ -161,7 +161,7 @@ class cliente():
 		miConexion.close()
 
 	def updateCliente(self,nombre,apellidos,fechaNacimiento,dni,telefono):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		miCursor.execute("update clientes set cli_nombre='"+ nombre +"', cli_apellidos='"+ apellidos +"', cli_FechaNacimiento='"+ fechaNacimiento +"', cli_dni='"+ dni +"', cli_telefono='"+ telefono +"'  where cli_codcli='"+str(self.id)+"'")
@@ -178,7 +178,7 @@ class cliente():
 		Carga con una busqueda con el nombre
 		Carga con id el cliente 
 		'''
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 		select="select * from clientes where 1=1 "
 		if nombre != None:
@@ -203,7 +203,7 @@ class cliente():
 		return lista
 
 	def comprovarContra(self,contra):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		try:
@@ -230,7 +230,7 @@ class administrador():
 
 	@staticmethod
 	def crearAdministrador(nombre,dni,clave):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		miCursor.execute("INSERT INTO administradores VALUES (NULL,?,?,?)", (nombre,dni,clave))
@@ -242,7 +242,7 @@ class administrador():
 		return ad
 
 	def borrarAdmin(self):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 		
 		miCursor.execute("delete from administradores where adm_codadm='"+str(self.id)+"'")
@@ -251,7 +251,7 @@ class administrador():
 		miConexion.close()
 
 	def updateAdmin(self,nombre,clave):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		miCursor.execute("update administradores set adm_nombre='"+ nombre +"', adm_clave='"+ clave +"' where adm_codadm ='"+str(self.id)+"'")
@@ -262,7 +262,7 @@ class administrador():
 
 	@staticmethod
 	def loadAdm(id,NIF,nombre):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 		select="select * from administradores where 1=1 "
 		if nombre != None:
@@ -272,7 +272,6 @@ class administrador():
 		if NIF != None:
 			select=select+"and adm_NIF like '"+str(NIF)+"' "
 
-	
 		miCursor.execute(select)
 
 		administradores=miCursor.fetchall()
@@ -288,7 +287,7 @@ class administrador():
 		return lista
 
 	def comprovarContra(self,contra):
-		miConexion=sqlite3.connect("BD_Banco")
+		miConexion=sqlite3.connect("BD_Banco.db")
 		miCursor=miConexion.cursor()
 
 		try:
