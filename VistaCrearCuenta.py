@@ -2,11 +2,23 @@ from tkinter import *
 from Controlador import CrearCuenta
 
 raiz=Tk()
+
+#posicionar ventana
+ancho_ventana = 400
+alto_ventana = 530
+x_ventana = raiz.winfo_screenwidth() // 2 - ancho_ventana // 2
+y_ventana = raiz.winfo_screenheight() // 2 - alto_ventana // 2
+posicion = str(ancho_ventana) + "x" + str(alto_ventana) + "+" + str(x_ventana) + "+" + str(y_ventana)
+raiz.geometry(posicion)
+
 raiz.title("Caixa Bank  Crear cuenta")
 raiz.iconbitmap('Recourses/icono.ico')
 
 miFrame=Frame(raiz,width=400, height=530)
 miFrame.pack()
+
+bg = PhotoImage(file = "Recourses/fondo.png") 
+background = Label(miFrame,image = bg).place(x = 0, y = 0, )
 
 lblBienvenida = Label(miFrame, text="Crea tu cuenta online aqui")
 lblBienvenida.place(x=100,y=50)

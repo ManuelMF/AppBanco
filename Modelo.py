@@ -100,7 +100,7 @@ class cuenta():
 		miConexion.close()
 	
 	@staticmethod
-	def loadCue(codCliente,nombre):
+	def loadCue(codCliente,nombre,codCuenta):
 		'''
 		Devueve una lista
 		Carga todas las cuentas con none none
@@ -114,6 +114,8 @@ class cuenta():
 			select=select+"and cue_nombre like '"+nombre+"%' "
 		if codCliente != None:
 			select=select+"and cue_codcli = "+str(codCliente)+" "
+		if codCuenta != None:
+			select=select+"and cue_codcue = "+str(codCuenta)+" "
 		
 		miCursor.execute(select)
 		
