@@ -122,27 +122,81 @@ class AdministrarCuentas():
 
 		cli = Modelo.cliente.loadCli(None,None,dni)[0]
 
-		self.lblnombre= Label(self.miFrameI, text="Nombre:")
-		self.lblnombre.place(x=70,y=30)
-		self.lblnombre.configure(font=("arial",9,"bold"),bg='cornsilk')
+		self.lblclinombre= Label(self.miFrameI, text=cli.nombre+" "+cli.apellidos)
+		self.lblclinombre.place(x=50,y=25)
+		self.lblclinombre.configure(font=("arial",9,"bold"),bg='cornsilk')
+
+		self.lblcuentas= Label(self.miFrameI, text="Cuentas:")
+		self.lblcuentas.place(x=50,y=55)
+		self.lblcuentas.configure(font=("arial",9,"bold"),bg='cornsilk')
 			
-		listacuentas=Modelo.cuenta.loadCue(clien.id,None,None)
+		listacuentas=Modelo.cuenta.loadCue(cli.id,None,None)
 		listacuentas2=[]
 		for i in range(len(listacuentas)):
 			nombre=listacuentas[i].nombre
 			listacuentas2.append(nombre)
 
-		self.combob = ttk.Combobox(self.raizD, state="readonly",
+		self.combob = ttk.Combobox(self.miFrameI, state="readonly",
    		values=listacuentas2)
-		self.combob.place(x=70, y=60)
+		self.combob.place(x=50, y=75)
 		self.combob.current(0)
 		
+		self.btnEliminarCue=Button(self.miFrameI,text="Eliminar Cuenta", command=lambda: self.eliminarCue())
+		self.btnEliminarCue.place(x=75,y=110) 
 
-		#def atajo(self):
-		#	pass
-		#combo.bind("<<ComboboxSelected>>", atajo)
+		self.lblCrearCue= Label(self.miFrameI, text="Crear cuenta:")
+		self.lblCrearCue.place(x=50,y=150)
+		self.lblCrearCue.configure(font=("arial",9,"bold"),bg='cornsilk')
+
+		self.lblConcepto= Label(self.miFrameI, text="Concepto:")
+		self.lblConcepto.place(x=50,y=170)
+		self.lblConcepto.configure(font=("arial",9),bg='cornsilk')
+
+		self.EntryCrearCue=Entry(self.miFrameI)
+		self.EntryCrearCue.place(x=50,y=190)
+
+		self.btnCrearCue=Button(self.miFrameI,text="Crear cuenta", command=lambda: self.CrearCue())
+		self.btnCrearCue.place(x=80,y=225) 
 
 		self.raizD.mainloop()
+
+	def eliminarCue(self):
+		cli = Modelo.cliente.loadCli(None,None,dni)[0]
+		cue = Modelo.cuenta.loadCue(cli.id,self.combob.get(),None)[0]
+
+		if cue.saldo > 0:
+			messagebox.showwarning("Error borrando cuenta", cue.nombre+" aun tiene dinero, "+str(cue.saldo)"€")
+		elif cue.saldo < 0: 
+			messagebox.showwarning("Error borrando cuenta", cue.nombre+" aun tiene deudas, "+str(cue.saldo)+"€")
+		else:
+			cue.borrarCuenta()
+			self.raizD.destroy()
+
+			listacuentas=Modelo.cuenta.loadCue(clien.id,None,None)
+			listacuentas2=[]
+			for i in range(len(listacuentas)):
+				nombre=listacuentas[i].nombre
+				listacuentas2.append(nombre)
+			combo['values'] = listacuentas2
+			combo.current(0)
+			cambiosDeCuenta()
+
+	def CrearCue(self):
+		cli = Modelo.cliente.loadCli(None,None,dni)[0]
+		#try:
+		Modelo.cuenta.crearCuenta(self.EntryCrearCue.get(),0,datetime.now().strftime('%Y-%m-%d'),cli.id)
+		self.raizD.destroy()
+
+		listacuentas=Modelo.cuenta.loadCue(clien.id,None,None)
+		listacuentas2=[]
+		for i in range(len(listacuentas)):
+			nombre=listacuentas[i].nombre
+			listacuentas2.append(nombre)
+		combo['values'] = listacuentas2
+		combo.current(len(listacuentas2)-1)
+		cambiosDeCuenta()
+		#except:
+		#	messagebox.showwarning("Error","Error creando cuenta")
 
 class VentanaHacerIngreso():
 	def __init__(self):
@@ -425,7 +479,11 @@ def cambiosDeCuenta():
 					Mov.saldoActual = str(Mov.saldoActual)+" "
 				else:
 					Mov.saldoActual = " "+str(Mov.saldoActual)
-
+		
+		anyo = Mov.fecha[:4]
+		mes = Mov.fecha[5:7]
+		dia = Mov.fecha[8:10]
+		-------------------------------
 		TextMov.insert(INSERT, Mov.concepto +"- "+ Mov.saldoAnterior +"- "+ str(importe) +"- "+ str(Mov.saldoActual) +"- "+Mov.fecha + "\n")
 	
 	ingresos=0
