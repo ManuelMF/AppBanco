@@ -40,7 +40,7 @@ class VentanaDatosPersonales():
 	def __init__(self):
 
 		self.raizD=Tk()
-		self.raizD.title("Datos personales")
+		self.raizD.title("Datos ")
 		self.raizD.resizable(0,0)
 		self.raizD.iconbitmap('Recourses/icono.ico')
 
@@ -86,7 +86,12 @@ class VentanaDatosPersonales():
 		self.lblfechaNacimiento.place(x=70,y=180)
 		self.lblfechaNacimiento.configure(font=("arial",9,"bold"),bg='cornsilk')
 
-		self.lblfechaNacimientoR= Label(self.miFrameI, text=cli.fechaNacimiento)
+		anyo = cli.fechaNacimiento[:4]
+		mes = cli.fechaNacimiento[5:7]
+		dia = cli.fechaNacimiento[8:10]
+		fecha = dia+"/"+mes+"/"+anyo
+
+		self.lblfechaNacimientoR= Label(self.miFrameI, text=fecha)
 		self.lblfechaNacimientoR.place(x=70,y=200)
 		self.lblfechaNacimientoR.configure(font=("arial",9),bg='cornsilk')
 
@@ -104,7 +109,7 @@ class AdministrarCuentas():
 	def __init__(self):
 
 		self.raizD=Tk()
-		self.raizD.title("Datos personales")
+		self.raizD.title("Cuentas")
 		self.raizD.resizable(0,0)
 		self.raizD.iconbitmap('Recourses/icono.ico')
 
@@ -165,7 +170,7 @@ class AdministrarCuentas():
 		cue = Modelo.cuenta.loadCue(cli.id,self.combob.get(),None)[0]
 
 		if cue.saldo > 0:
-			messagebox.showwarning("Error borrando cuenta", cue.nombre+" aun tiene dinero, "+str(cue.saldo)"€")
+			messagebox.showwarning("Error borrando cuenta", cue.nombre+" aun tiene dinero, "+str(cue.saldo)+"€")
 		elif cue.saldo < 0: 
 			messagebox.showwarning("Error borrando cuenta", cue.nombre+" aun tiene deudas, "+str(cue.saldo)+"€")
 		else:
@@ -444,7 +449,9 @@ def cambiosDeCuenta():
 	# saldo de la cuenta
 	lblsaldo['text'] = "Saldo actual de la cuenta: "+str(cuentaActual.saldo)
 	# lista mov
-	listaMovimientos = Modelo.movimiento.loadMov(None,cuentaActual.id)
+	listaMovimientosSinOrdenar = Modelo.movimiento.loadMov(None,cuentaActual.id)
+	listaMovimientos =  [num for num in reversed(listaMovimientosSinOrdenar)]
+
 	TextMov.delete("1.0","end")
 	TextMov.insert(INSERT, "  Concepto   - Saldo ant - Importe - Saldo  - Fecha\n" )
 	for i in range(len(listaMovimientos)):
@@ -483,8 +490,8 @@ def cambiosDeCuenta():
 		anyo = Mov.fecha[:4]
 		mes = Mov.fecha[5:7]
 		dia = Mov.fecha[8:10]
-		-------------------------------
-		TextMov.insert(INSERT, Mov.concepto +"- "+ Mov.saldoAnterior +"- "+ str(importe) +"- "+ str(Mov.saldoActual) +"- "+Mov.fecha + "\n")
+		fecha = dia+"/"+mes+"/"+anyo
+		TextMov.insert(INSERT, Mov.concepto +"- "+ Mov.saldoAnterior +"- "+ str(importe) +"- "+ str(Mov.saldoActual) +"- "+fecha + "\n")
 	
 	ingresos=0
 	gastos=0
